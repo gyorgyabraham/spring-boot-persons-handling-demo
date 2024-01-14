@@ -1,5 +1,6 @@
 package com.github.gyorgyabraham.persons.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -16,36 +17,27 @@ public class Address {
     private long id;
 
     @Column(name = "country", nullable = false)
-    @Min(2)
-    @Max(30)
     @NotNull
     private String country;
 
     @Column(name = "city", nullable = false)
-    @Min(2)
-    @Max(30)
     @NotNull
     private String city;
 
     @Column(name = "street", nullable = false)
-    @Min(2)
-    @Max(30)
     @NotNull
     private String street;
 
     @Column(name = "houseNr", nullable = false)
-    @Min(2)
-    @Max(30)
     @NotNull
     private String houseNr;
 
     @Column(name = "zipcode", nullable = false)
-    @Min(2)
-    @Max(30)
     @NotNull
     private String zipcode;
 
     @OneToOne
+    @JsonIgnore
     private Person owningPerson;
 
     public Address() {

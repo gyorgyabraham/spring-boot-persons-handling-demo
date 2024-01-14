@@ -1,17 +1,17 @@
 package com.github.gyorgyabraham.persons.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "person")
+@Table(name = "person", uniqueConstraints = {@UniqueConstraint(columnNames = {"first_name", "last_name"})})
 public class Person {
 
     @Id
@@ -19,27 +19,21 @@ public class Person {
     private long id;
 
     @Column(name = "first_name", nullable = false)
-    @Min(2)
-    @Max(30)
     @NotNull
     private String firstName;
 
     @Column(name = "last_name", nullable = false)
-    @Min(2)
-    @Max(30)
     @NotNull
     private String lastName;
 
-    @NotNull
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Address permanentAddress;
 
-    @Null
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Address temporaryAddress;
 
-    @Null
-    @OneToMany(mappedBy = "owningPerson")
+    @OneToMany(mappedBy = "owningPerson", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.EXTRA)
     private List<Contact> contacts = new ArrayList<>();
 
     public Person() {
