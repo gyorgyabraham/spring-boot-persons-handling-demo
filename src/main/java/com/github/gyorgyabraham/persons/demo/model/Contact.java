@@ -11,7 +11,8 @@ import jakarta.persistence.*;
 @DiscriminatorColumn(name = "contactType", discriminatorType = DiscriminatorType.STRING)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = EmailContact.class, name = "emailContact")
+        @JsonSubTypes.Type(value = EmailContact.class, name = "emailContact"),
+        @JsonSubTypes.Type(value = PhoneContact.class, name = "phoneContact")
 })
 public abstract class Contact {
 
