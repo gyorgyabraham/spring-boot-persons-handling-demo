@@ -6,6 +6,10 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 @Entity
 @Table(name = "person")
 public class Person {
@@ -26,13 +30,17 @@ public class Person {
     @NotNull
     private String lastName;
 
-    @Null
+    @NotNull
     @OneToOne
     private Address permanentAddress;
 
     @Null
     @OneToOne
     private Address temporaryAddress;
+
+    @Null
+    @OneToMany(mappedBy = "owningPerson")
+    private List<Contact> contacts = new ArrayList<>();
 
     public Person() {
 
@@ -84,6 +92,14 @@ public class Person {
         this.temporaryAddress = temporaryAddress;
     }
 
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -92,6 +108,20 @@ public class Person {
                 ", lastName='" + lastName + '\'' +
                 ", permanentAddress=" + permanentAddress +
                 ", temporaryAddress=" + temporaryAddress +
+                ", contacts=" + contacts +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return id == person.id && Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName) && Objects.equals(permanentAddress, person.permanentAddress) && Objects.equals(temporaryAddress, person.temporaryAddress) && Objects.equals(contacts, person.contacts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, permanentAddress, temporaryAddress, contacts);
     }
 }
