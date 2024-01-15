@@ -68,6 +68,27 @@ public class PersonControllerWebTest {
         body.put("firstName", "Gipsz");
         body.put("lastName", "Jakab");
 
+        Map<String, Object> invalidBody = new HashMap<>();
+        body.put("firstName", "Gipsz");
+
+        // empty body
+        mockMvc.perform(post("/api/v1/persons")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        // missing field in body
+        mockMvc.perform(post("/api/v1/persons")
+                        .content(objectMapper.writeValueAsString(invalidBody))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        // bad media type
+        mockMvc.perform(post("/api/v1/persons")
+                        .content(objectMapper.writeValueAsString(body))
+                        .contentType(MediaType.APPLICATION_PDF_VALUE))
+                .andExpect(status().isUnsupportedMediaType());
+
+        // correct request
         mockMvc.perform(post("/api/v1/persons")
                         .content(objectMapper.writeValueAsString(body))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -80,9 +101,53 @@ public class PersonControllerWebTest {
         body.put("firstName", "Gipsz");
         body.put("lastName", "Jakab");
 
+        Map<String, Object> invalidBody = new HashMap<>();
+        body.put("firstName", "Gipsz");
+
+        // empty body
+        mockMvc.perform(put("/api/v1/persons/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        // missing field in body
+        mockMvc.perform(put("/api/v1/persons/1")
+                        .content(objectMapper.writeValueAsString(invalidBody))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        // bad media type
+        mockMvc.perform(put("/api/v1/persons/1")
+                        .content(objectMapper.writeValueAsString(body))
+                        .contentType(MediaType.APPLICATION_PDF_VALUE))
+                .andExpect(status().isUnsupportedMediaType());
+
+        // correct request
         mockMvc.perform(put("/api/v1/persons/1")
                         .content(objectMapper.writeValueAsString(body))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testDeletePerson() throws Exception {
+        mockMvc.perform(delete("/api/v1/persons/1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testCallInvalidUrl() throws Exception {
+        // some non existing uri
+        mockMvc.perform(get("/api/v1/some-non-existing-url"))
+                .andExpect(status().isNotFound());
+
+        // various unsupported methods
+        mockMvc.perform(delete("/api/v1/persons"))
+                .andExpect(status().isMethodNotAllowed());
+
+        mockMvc.perform(post("/api/v1/persons/1"))
+                .andExpect(status().isMethodNotAllowed());
+
+        mockMvc.perform(put("/api/v1/persons"))
+                .andExpect(status().isMethodNotAllowed());
     }
 }

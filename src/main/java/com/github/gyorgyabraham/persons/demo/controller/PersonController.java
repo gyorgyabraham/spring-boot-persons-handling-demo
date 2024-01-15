@@ -43,7 +43,7 @@ public class PersonController {
     }
 
     @PostMapping("/persons")
-    public ResponseEntity<Person> createPerson(@Valid @RequestBody Person person, Errors errors) {
+    public ResponseEntity<Person> createPerson(@Valid @RequestBody Person person) {
         personRepository.save(person);
 
         Address permanentAddress = person.getPermanentAddress();
