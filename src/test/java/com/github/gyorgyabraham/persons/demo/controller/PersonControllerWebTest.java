@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Integration test class that tests web endpoints of PersonController.
+ * Test class that tests web endpoints of PersonController.
  */
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PersonController.class)
