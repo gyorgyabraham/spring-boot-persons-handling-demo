@@ -9,6 +9,7 @@ import com.github.gyorgyabraham.persons.demo.repository.ContactRepository;
 import com.github.gyorgyabraham.persons.demo.repository.PersonRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class PersonController {
     }
 
     @PostMapping("/persons")
-    public Person createPerson(@Valid @RequestBody Person person, Errors errors) {
+    public ResponseEntity<Person> createPerson(@Valid @RequestBody Person person, Errors errors) {
         personRepository.save(person);
 
         Address permanentAddress = person.getPermanentAddress();
@@ -58,7 +59,7 @@ public class PersonController {
 
         person.getContacts().stream().forEach(contact -> contact.setOwningPerson(person));
         contactRepository.saveAll(person.getContacts());
-        return person;
+        return new ResponseEntity<Person>(person, HttpStatus.CREATED);
     }
 
     @PutMapping("/persons/{id}")
