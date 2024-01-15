@@ -13,8 +13,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.github.gyorgyabraham.persons.demo.controller.TestUtils.DEFAULT_TEST_PERSONS;
 
 /**
  * Test class which tests the service code in PersonControllerTest.
@@ -34,15 +35,6 @@ public class PersonControllerTest {
     @InjectMocks
     private PersonController personController;
 
-    private static final List<Person> DEFAULT_TEST_PERSONS = new ArrayList<>();
-
-    static {
-        Person peter = new Person("Peter", "Moore");
-        DEFAULT_TEST_PERSONS.add(peter);
-
-        Person jacob = new Person("Jacob", "Smith");
-        DEFAULT_TEST_PERSONS.add(jacob);
-    }
 
     @BeforeEach
     public void setUp() {
