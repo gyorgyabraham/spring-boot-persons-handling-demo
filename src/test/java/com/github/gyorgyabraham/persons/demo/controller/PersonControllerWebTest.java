@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static com.github.gyorgyabraham.persons.demo.controller.TestUtils.DEFAULT_TEST_PERSONS;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -47,18 +48,111 @@ public class PersonControllerWebTest {
     @BeforeEach
     public void setUp() {
         Mockito.when(personRepository.findAll()).thenReturn(DEFAULT_TEST_PERSONS);
-        Mockito.when(personRepository.findById(Mockito.any())).thenReturn(Optional.of(DEFAULT_TEST_PERSONS.get(1)));
+        Mockito.when(personRepository.findById(Long.valueOf(0))).thenReturn(Optional.of(DEFAULT_TEST_PERSONS.get(0)));
+        Mockito.when(personRepository.findById(Long.valueOf(1))).thenReturn(Optional.of(DEFAULT_TEST_PERSONS.get(1)));
+        Mockito.when(personRepository.findById(Long.valueOf(2))).thenReturn(Optional.of(DEFAULT_TEST_PERSONS.get(2)));
     }
 
     @Test
     public void testGetAllPersons() throws Exception {
         mockMvc.perform(get("/api/v1/persons"))
+                .andExpect(content().json("[\n" +
+                        "  {\n" +
+                        "    \"id\": 0,\n" +
+                        "    \"firstName\": \"Peter\",\n" +
+                        "    \"lastName\": \"Moore\",\n" +
+                        "    \"permanentAddress\": {\n" +
+                        "      \"id\": 0,\n" +
+                        "      \"country\": \"Hungary\",\n" +
+                        "      \"city\": \"Budapest\",\n" +
+                        "      \"street\": \"Puli setany\",\n" +
+                        "      \"houseNr\": \"1\",\n" +
+                        "      \"zipcode\": \"1213\"\n" +
+                        "    },\n" +
+                        "    \"temporaryAddress\": {\n" +
+                        "      \"id\": 0,\n" +
+                        "      \"country\": \"Hungary\",\n" +
+                        "      \"city\": \"Budapest\",\n" +
+                        "      \"street\": \"Cirmos setany\",\n" +
+                        "      \"houseNr\": \"3\",\n" +
+                        "      \"zipcode\": \"1213\"\n" +
+                        "    },\n" +
+                        "    \"contacts\": [\n" +
+                        "      {\n" +
+                        "        \"type\": \"emailContact\",\n" +
+                        "        \"emailAddress\": \"peter@puli.com\"\n" +
+                        "      },\n" +
+                        "      {\n" +
+                        "        \"type\": \"phoneContact\",\n" +
+                        "        \"phoneNumber\": null\n" +
+                        "      }\n" +
+                        "    ]\n" +
+                        "  },\n" +
+                        "  {\n" +
+                        "    \"id\": 0,\n" +
+                        "    \"firstName\": \"Jacob\",\n" +
+                        "    \"lastName\": \"Smith\",\n" +
+                        "    \"permanentAddress\": null,\n" +
+                        "    \"temporaryAddress\": null,\n" +
+                        "    \"contacts\": []\n" +
+                        "  },\n" +
+                        "  {\n" +
+                        "    \"id\": 0,\n" +
+                        "    \"firstName\": \"Gipsz\",\n" +
+                        "    \"lastName\": \"Jakab\",\n" +
+                        "    \"permanentAddress\": null,\n" +
+                        "    \"temporaryAddress\": null,\n" +
+                        "    \"contacts\": []\n" +
+                        "  }\n" +
+                        "]"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void testGetPersonDetail() throws Exception {
+        mockMvc.perform(get("/api/v1/persons/0"))
+                .andExpect(content().json("{\n" +
+                        "  \"id\": 0,\n" +
+                        "  \"firstName\": \"Peter\",\n" +
+                        "  \"lastName\": \"Moore\",\n" +
+                        "  \"permanentAddress\": {\n" +
+                        "    \"id\": 0,\n" +
+                        "    \"country\": \"Hungary\",\n" +
+                        "    \"city\": \"Budapest\",\n" +
+                        "    \"street\": \"Puli setany\",\n" +
+                        "    \"houseNr\": \"1\",\n" +
+                        "    \"zipcode\": \"1213\"\n" +
+                        "  },\n" +
+                        "  \"temporaryAddress\": {\n" +
+                        "    \"id\": 0,\n" +
+                        "    \"country\": \"Hungary\",\n" +
+                        "    \"city\": \"Budapest\",\n" +
+                        "    \"street\": \"Cirmos setany\",\n" +
+                        "    \"houseNr\": \"3\",\n" +
+                        "    \"zipcode\": \"1213\"\n" +
+                        "  },\n" +
+                        "  \"contacts\": [\n" +
+                        "    {\n" +
+                        "      \"type\": \"emailContact\",\n" +
+                        "      \"emailAddress\": \"peter@puli.com\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"type\": \"phoneContact\",\n" +
+                        "      \"phoneNumber\": null\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}"))
+                .andExpect(status().isOk());
+
         mockMvc.perform(get("/api/v1/persons/1"))
+                .andExpect(content().json("{\n" +
+                        "  \"id\": 0,\n" +
+                        "  \"firstName\": \"Jacob\",\n" +
+                        "  \"lastName\": \"Smith\",\n" +
+                        "  \"permanentAddress\": null,\n" +
+                        "  \"temporaryAddress\": null,\n" +
+                        "  \"contacts\": []\n" +
+                        "}"))
                 .andExpect(status().isOk());
     }
 
@@ -105,24 +199,24 @@ public class PersonControllerWebTest {
         body.put("firstName", "Gipsz");
 
         // empty body
-        mockMvc.perform(put("/api/v1/persons/1")
+        mockMvc.perform(put("/api/v1/persons/2")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
 
         // missing field in body
-        mockMvc.perform(put("/api/v1/persons/1")
+        mockMvc.perform(put("/api/v1/persons/2")
                         .content(objectMapper.writeValueAsString(invalidBody))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
 
         // bad media type
-        mockMvc.perform(put("/api/v1/persons/1")
+        mockMvc.perform(put("/api/v1/persons/2")
                         .content(objectMapper.writeValueAsString(body))
                         .contentType(MediaType.APPLICATION_PDF_VALUE))
                 .andExpect(status().isUnsupportedMediaType());
 
         // correct request
-        mockMvc.perform(put("/api/v1/persons/1")
+        mockMvc.perform(put("/api/v1/persons/2")
                         .content(objectMapper.writeValueAsString(body))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -130,7 +224,7 @@ public class PersonControllerWebTest {
 
     @Test
     public void testDeletePerson() throws Exception {
-        mockMvc.perform(delete("/api/v1/persons/1"))
+        mockMvc.perform(delete("/api/v1/persons/2"))
                 .andExpect(status().isOk());
     }
 

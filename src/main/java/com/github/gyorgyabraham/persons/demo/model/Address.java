@@ -44,8 +44,7 @@ public class Address {
 
     }
 
-    public Address(long id, String country, String city, String street, String houseNr, String zipcode) {
-        this.id = id;
+    public Address(String country, String city, String street, String houseNr, String zipcode) {
         this.country = country;
         this.city = city;
         this.street = street;
