@@ -85,12 +85,17 @@ public class PersonController {
 
         // add new address entities
         Address newPermanentAddress = personDetails.getPermanentAddress();
-        newPermanentAddress.setOwningPerson(existingPerson);
-        existingPerson.setPermanentAddress(newPermanentAddress);
-        Address newTemporaryAddress = personDetails.getTemporaryAddress();
-        newTemporaryAddress.setOwningPerson(existingPerson);
-        existingPerson.setTemporaryAddress(newTemporaryAddress);
+        if (null != newPermanentAddress) {
+            newPermanentAddress.setOwningPerson(existingPerson);
+            existingPerson.setPermanentAddress(newPermanentAddress);
+        }
 
+        Address newTemporaryAddress = personDetails.getTemporaryAddress();
+        if (null != newTemporaryAddress) {
+            newTemporaryAddress.setOwningPerson(existingPerson);
+            existingPerson.setTemporaryAddress(newTemporaryAddress);
+        }
+        
         // delete old contact entities to prevent flooding them in DB
         List<Contact> existingContacts = existingPerson.getContacts();
         existingContacts.forEach(c -> {
