@@ -1,9 +1,7 @@
-package com.github.gyorgyabraham.persons.demo.controller;
+package com.github.gyorgyabraham.persons.demo.service;
 
 import com.github.gyorgyabraham.persons.demo.model.Person;
 import com.github.gyorgyabraham.persons.demo.repository.PersonRepository;
-import com.github.gyorgyabraham.persons.demo.service.PersonService;
-import com.github.gyorgyabraham.persons.demo.service.PersonServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,13 +13,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.github.gyorgyabraham.persons.demo.controller.TestUtils.DEFAULT_TEST_PERSONS;
+import static com.github.gyorgyabraham.persons.demo.TestUtils.DEFAULT_TEST_PERSONS;
 
 /**
  * Test class for {@link PersonService}.
  */
 @ExtendWith(MockitoExtension.class)
-public class PersonControllerTest {
+public class PersionServiceTest {
 
     @Mock
     private PersonRepository personRepository;

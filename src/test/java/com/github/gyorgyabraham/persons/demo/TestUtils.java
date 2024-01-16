@@ -1,4 +1,4 @@
-package com.github.gyorgyabraham.persons.demo.controller;
+package com.github.gyorgyabraham.persons.demo;
 
 import com.github.gyorgyabraham.persons.demo.model.Address;
 import com.github.gyorgyabraham.persons.demo.model.EmailContact;
