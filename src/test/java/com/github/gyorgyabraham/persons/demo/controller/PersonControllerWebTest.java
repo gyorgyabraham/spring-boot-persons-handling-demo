@@ -1,9 +1,8 @@
 package com.github.gyorgyabraham.persons.demo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.gyorgyabraham.persons.demo.repository.AddressRepository;
-import com.github.gyorgyabraham.persons.demo.repository.ContactRepository;
-import com.github.gyorgyabraham.persons.demo.repository.PersonRepository;
+import com.github.gyorgyabraham.persons.demo.exception.ResourceNotFoundException;
+import com.github.gyorgyabraham.persons.demo.service.PersonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.github.gyorgyabraham.persons.demo.controller.TestUtils.DEFAULT_TEST_PERSONS;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Test class that tests web endpoints of PersonController.
+ * Test class for {@link PersonController}.
  */
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PersonController.class)
@@ -35,22 +33,16 @@ public class PersonControllerWebTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private PersonRepository personRepository;
-
-    @MockBean
-    private AddressRepository addressRepository;
-
-    @MockBean
-    private ContactRepository contactRepository;
+    private PersonService personService;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
-    public void setUp() {
-        Mockito.when(personRepository.findAll()).thenReturn(DEFAULT_TEST_PERSONS);
-        Mockito.when(personRepository.findById(Long.valueOf(0))).thenReturn(Optional.of(DEFAULT_TEST_PERSONS.get(0)));
-        Mockito.when(personRepository.findById(Long.valueOf(1))).thenReturn(Optional.of(DEFAULT_TEST_PERSONS.get(1)));
-        Mockito.when(personRepository.findById(Long.valueOf(2))).thenReturn(Optional.of(DEFAULT_TEST_PERSONS.get(2)));
+    public void setUp() throws ResourceNotFoundException {
+        Mockito.when(personService.getAllPersons()).thenReturn(DEFAULT_TEST_PERSONS);
+        Mockito.when(personService.getPersonById(Long.valueOf(0))).thenReturn(DEFAULT_TEST_PERSONS.get(0));
+        Mockito.when(personService.getPersonById(Long.valueOf(1))).thenReturn(DEFAULT_TEST_PERSONS.get(1));
+        Mockito.when(personService.getPersonById(Long.valueOf(2))).thenReturn(DEFAULT_TEST_PERSONS.get(2));
     }
 
     @Test
